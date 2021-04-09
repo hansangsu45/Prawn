@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class PrawnData
+public class SaveData
 {
     public List<Prawn> prawns = new List<Prawn>();
 }
@@ -20,11 +20,23 @@ public class Prawn
     public int price;
     public int foodAmount;
     public float restTime;
+
+    public string name;
     public string ex;
     public Sprite spr;
 
-    public Prawn()
+    public Prawn(short id, int hp, int mental, int str, int def, int price, int foodAmount, float restTime,string name,string ex, Sprite spr)
     {
-
+        this.id = id;
+        this.hp = hp;
+        this.mental = mental;
+        this.str = str;
+        this.def = def;
+        this.price = price;
+        this.foodAmount = foodAmount;
+        this.restTime = restTime;
+        this.name = name;
+        this.ex = ex;
+        this.spr = spr;
     }
 }

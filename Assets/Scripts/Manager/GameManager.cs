@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     private void Awake()
     {
