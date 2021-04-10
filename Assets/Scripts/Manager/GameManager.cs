@@ -14,6 +14,7 @@ public class GameManager : MonoSingleton<GameManager>
     private string filePath;
     private readonly string SaveFileName = "Savefile";
     string savedJson;
+    public GameObject BlackPanel;
 
     [SerializeField] private MyPrawn myPrawn;
     public Sprite[] prawnSprs;
@@ -35,6 +36,8 @@ public class GameManager : MonoSingleton<GameManager>
             myPrawn.PrawnLoad(saveData.currentPrawn);
             saveData.isFirstStart = false;
         }
+
+        StartCoroutine(FadeEffect(BlackPanel.GetComponent<Image>()));
     }
 
     public void Save()
@@ -84,5 +87,33 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnApplicationPause(bool pause)
     {
         Save();
+    }
+
+    public IEnumerator FadeEffect(Image img, float fadeTime=1f)
+    {
+        float t = fadeTime / 100;
+        Color c = img.color;
+
+        if(img.gameObject.activeSelf)
+        {
+            while(c.a>0)
+            {
+                c.a -= 0.01f;
+                img.color = c;
+                yield return new WaitForSeconds(t);
+            }
+            img.gameObject.SetActive(false);
+        }
+        else
+        {
+            img.gameObject.SetActive(true);
+            c.a = 0;
+            while(c.a!=1)
+            {
+                c.a += 0.01f;
+                img.color = c;
+                yield return new WaitForSeconds(t);
+            }
+        }
     }
 }
