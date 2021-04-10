@@ -40,12 +40,14 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(FadeEffect(BlackPanel.GetComponent<Image>()));
     }
 
+    #region 저장/로드
     public void Save()
     {
         savedJson = JsonUtility.ToJson(saveData);
         byte[] bytes = Encoding.UTF8.GetBytes(savedJson);
         string code = Convert.ToBase64String(bytes);
         File.WriteAllText(filePath, code);
+        SaveData();
     }
 
     public void Load()
@@ -63,11 +65,36 @@ public class GameManager : MonoSingleton<GameManager>
     { 
         myPrawn.PrawnLoad(saveData.currentPrawn);
         coinTxt.text = saveData.coin.ToString();
+        StartCoroutine(AutoTouch());
     }    
+    private void SaveData()
+    {
+        foreach(Prawn p in saveData.prawns)
+        {
+            if(p.id==saveData.currentPrawn.id)
+            {
+                saveData.prawns[saveData.prawns.IndexOf(p)] = saveData.currentPrawn;
+                return;
+            }
+        }
+    }
+    #endregion
+
     public void Touch()
     {
         saveData.coin += saveData.currentPrawn.power;
         coinTxt.text = saveData.coin.ToString();
+        saveData.currentPrawn.touchCount++;
+    }
+
+    IEnumerator AutoTouch()
+    {
+        while(saveData.currentPrawn.isAutoWork)
+        {
+            saveData.coin += saveData.currentPrawn.autoPowor;
+            coinTxt.text = saveData.coin.ToString();
+            yield return new WaitForSeconds(1);
+        }
     }
 
     private void Update()
@@ -79,14 +106,19 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Save();
     }
-
     private void OnApplicationFocus(bool focus)
     {
-        Save();
+        if (!focus)
+        {
+            Save();
+        }
     }
     private void OnApplicationPause(bool pause)
     {
-        Save();
+        if (pause)
+        {
+            Save();
+        }
     }
 
     public IEnumerator FadeEffect(Image img, float fadeTime=1f)
