@@ -14,6 +14,7 @@ public class GameManager : MonoSingleton<GameManager>
     private string filePath;
     private readonly string SaveFileName = "Savefile";
     string savedJson;
+    Coroutine AutoTchCo;
     public GameObject BlackPanel;
 
     [SerializeField] private MyPrawn myPrawn;
@@ -65,7 +66,7 @@ public class GameManager : MonoSingleton<GameManager>
     { 
         myPrawn.PrawnLoad(saveData.currentPrawn);
         coinTxt.text = saveData.coin.ToString();
-        StartCoroutine(AutoTouch());
+        AutoTchCo=StartCoroutine(AutoTouch());
     }    
     private void SaveData()
     {
