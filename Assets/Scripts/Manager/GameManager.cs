@@ -9,7 +9,9 @@ using System;
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] SaveData saveData;
-    public SaveData savedData { get; }
+    public SaveData savedData { get { return saveData; } }
+
+    private Animator prawnAnimator;
 
     private string filePath;
     private readonly string SaveFileName = "Savefile";
@@ -34,6 +36,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         saveData = new SaveData();
         filePath = string.Concat(Application.persistentDataPath, "/", SaveFileName);
+
         Load();
 
         if (saveData.isFirstStart)
@@ -43,6 +46,10 @@ public class GameManager : MonoSingleton<GameManager>
             myPrawn.PrawnLoad(saveData.currentPrawn);
             saveData.isFirstStart = false;
         }
+
+        
+
+        prawnAnimator = myPrawn.GetComponent<Animator>();
 
         StartCoroutine(FadeEffect(BlackPanel.GetComponent<Image>()));
     }
@@ -97,6 +104,7 @@ public class GameManager : MonoSingleton<GameManager>
         saveData.currentPrawn.hp -= saveData.currentPrawn.needHp;
         hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
         hpTxt.text = string.Format("{0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
+        prawnAnimator.Play("PrawnAnimation");
     }
 
     IEnumerator AutoTouch()
