@@ -21,10 +21,16 @@ public class GameManager : MonoSingleton<GameManager>
     public Sprite[] prawnSprs;
     public Text coinTxt;
 
+    public GameObject[] mainObjs;
+
+    public Image hpImage;
+    public Text hpTxt;
+
     private void Awake()
     {
         Application.runInBackground = true;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1440, 2960, true);
 
         saveData = new SaveData();
         filePath = string.Concat(Application.persistentDataPath, "/", SaveFileName);
@@ -32,7 +38,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(false, 10, 300, 100, 100, 50, 0, 10, 300, 1, 0, 300, "흰다리 새우", prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 300, 10, 0, 300, "흰다리 새우", prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             myPrawn.PrawnLoad(saveData.currentPrawn);
             saveData.isFirstStart = false;
@@ -66,7 +72,9 @@ public class GameManager : MonoSingleton<GameManager>
     { 
         myPrawn.PrawnLoad(saveData.currentPrawn);
         coinTxt.text = saveData.coin.ToString();
-        AutoTchCo=StartCoroutine(AutoTouch());
+        hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
+        hpTxt.text = string.Format("{0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
+        AutoTchCo =StartCoroutine(AutoTouch());
     }    
     private void SaveData()
     {
@@ -86,6 +94,9 @@ public class GameManager : MonoSingleton<GameManager>
         saveData.coin += saveData.currentPrawn.power;
         coinTxt.text = saveData.coin.ToString();
         saveData.currentPrawn.touchCount++;
+        saveData.currentPrawn.hp -= saveData.currentPrawn.needHp;
+        hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
+        hpTxt.text = string.Format("{0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
     }
 
     IEnumerator AutoTouch()
@@ -100,7 +111,10 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            //UI닫기(열린 UI없으면 종료 UI열기)
+        }
     }
 
     private void OnApplicationQuit()
@@ -148,5 +162,10 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return new WaitForSeconds(t);
             }
         }
+    }
+
+    public void ButtonUIClick(int n)
+    {
+        mainObjs[n].SetActive(!mainObjs[0].activeSelf);
     }
 }

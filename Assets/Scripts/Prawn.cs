@@ -20,6 +20,7 @@ public class Prawn
 
     public int maxHp;
     public int hp;
+    public int needHp;  //터치당 필요 닳는 체력
     public int mental;  //정신력(배고픔 상태)
     public int curMental; //현재 정신력
     public int str;  //공격력
@@ -38,11 +39,12 @@ public class Prawn
 
     public Sprite spr;
 
-    public Prawn(bool isAuto, short id,int maxHp, int mental, int str, int def, int price, int foodAmount,int maxTouchCnt,int power,int auPower, float restTime, string name, Sprite spr)
+    public Prawn(bool isAuto, short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int maxTouchCnt,int power,int auPower, float restTime, string name, Sprite spr)
     {
         this.isAutoWork = isAuto;
         this.id = id;
         this.maxHp = maxHp;
+        this.needHp = needHp;
         this.mental = mental;
         this.str = str;
         this.def = def;
