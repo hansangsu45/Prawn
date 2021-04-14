@@ -25,8 +25,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public GameObject[] mainObjs;
 
-    public Image hpImage;
-    public Text hpTxt;
+    public Image hpImage, mentalImage;
+    public Text hpTxt, mentalTxt;
 
     private void Awake()
     {
@@ -78,9 +78,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void DataLoad()
     { 
         myPrawn.PrawnLoad(saveData.currentPrawn);
-        coinTxt.text = saveData.coin.ToString();
-        hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
-        hpTxt.text = string.Format("{0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
+        SetData();
         AutoTchCo =StartCoroutine(AutoTouch());
     }    
     private void SaveData()
@@ -96,14 +94,33 @@ public class GameManager : MonoSingleton<GameManager>
     }
     #endregion
 
+    public void SetData()
+    {
+        coinTxt.text = saveData.coin.ToString();
+        hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
+        hpTxt.text = string.Format("HP: {0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
+        mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
+        mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
+    }
+
     public void Touch()
     {
+        if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
+            return;
+
         saveData.coin += saveData.currentPrawn.power;
         coinTxt.text = saveData.coin.ToString();
         saveData.currentPrawn.touchCount++;
+        if(saveData.currentPrawn.touchCount%5==0)
+        {
+            saveData.currentPrawn.curMental--;
+            mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
+            mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
+        }
+
         saveData.currentPrawn.hp -= saveData.currentPrawn.needHp;
         hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
-        hpTxt.text = string.Format("{0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
+        hpTxt.text = string.Format("HP: {0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
         prawnAnimator.Play("PrawnAnimation");
     }
 
