@@ -18,6 +18,7 @@ public class Prawn
 
     public short id;
 
+    public int level = 1;
     public int maxHp;
     public int hp;
     public int needHp;  //터치당 필요 닳는 체력
@@ -36,10 +37,11 @@ public class Prawn
     public float currentRestTime;  //현재 휴식한 시간
 
     public string name;
+    public string explain;
 
     public Sprite spr;
 
-    public Prawn(bool isAuto, short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int maxTouchCnt,int power,int auPower, float restTime, string name, Sprite spr)
+    public Prawn(bool isAuto, short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int maxTouchCnt,int power,int auPower, float restTime, string name,string ex ,Sprite spr)
     {
         this.isAutoWork = isAuto;
         this.id = id;
@@ -55,6 +57,7 @@ public class Prawn
         this.autoPowor = auPower;
         this.restTime = restTime;
         this.name = name;
+        this.explain = ex;
         this.spr = spr;
 
         hp = maxHp;

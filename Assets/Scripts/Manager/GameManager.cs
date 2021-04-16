@@ -10,6 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] SaveData saveData;
     public SaveData savedData { get { return saveData; } }
+    public ShopManager shopManager;
 
     private Animator prawnAnimator;
 
@@ -19,14 +20,15 @@ public class GameManager : MonoSingleton<GameManager>
     Coroutine AutoTchCo;
     public GameObject BlackPanel;
 
-    [SerializeField] private MyPrawn myPrawn;
+    public MyPrawn myPrawn;
     public Sprite[] prawnSprs;
     public Text coinTxt;
 
     public GameObject[] mainObjs;
+    public List<GameObject> uiObjs;
 
     public Image hpImage, mentalImage;
-    public Text hpTxt, mentalTxt;
+    public Text hpTxt, mentalTxt, systemTxt;
 
     private void Awake()
     {
@@ -41,13 +43,11 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 300, 10, 0, 300, "흰다리 새우", prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 300, 10, 0, 300, "흰다리 새우","(기본 새우 설명)" ,prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             myPrawn.PrawnLoad(saveData.currentPrawn);
             saveData.isFirstStart = false;
         }
-
-        
 
         prawnAnimator = myPrawn.GetComponent<Animator>();
 
@@ -57,11 +57,11 @@ public class GameManager : MonoSingleton<GameManager>
     #region 저장/로드
     public void Save()
     {
+        SaveData();
         savedJson = JsonUtility.ToJson(saveData);
         byte[] bytes = Encoding.UTF8.GetBytes(savedJson);
         string code = Convert.ToBase64String(bytes);
         File.WriteAllText(filePath, code);
-        SaveData();
     }
 
     public void Load()
@@ -81,7 +81,7 @@ public class GameManager : MonoSingleton<GameManager>
         SetData();
         AutoTchCo =StartCoroutine(AutoTouch());
     }    
-    private void SaveData()
+    public void SaveData()
     {
         foreach(Prawn p in saveData.prawns)
         {
@@ -92,8 +92,6 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
-    #endregion
-
     public void SetData()
     {
         coinTxt.text = saveData.coin.ToString();
@@ -102,6 +100,8 @@ public class GameManager : MonoSingleton<GameManager>
         mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
         mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
     }
+
+    #endregion
 
     public void Touch()
     {
@@ -138,7 +138,15 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            //UI닫기(열린 UI없으면 종료 UI열기)
+            if(uiObjs.Count>0)
+            {
+                uiObjs[uiObjs.Count - 1].SetActive(false);
+                uiObjs.RemoveAt(uiObjs.Count - 1);
+            }
+            else
+            {
+                //게임종료 패널 띄우기
+            }
         }
     }
 
@@ -149,13 +157,6 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnApplicationFocus(bool focus)
     {
         if (!focus)
-        {
-            Save();
-        }
-    }
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
         {
             Save();
         }
@@ -191,6 +192,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ButtonUIClick(int n)
     {
-        mainObjs[n].SetActive(!mainObjs[0].activeSelf);
+        if (mainObjs[n].activeSelf) uiObjs.Remove(mainObjs[n]);
+        else uiObjs.Add(mainObjs[n]);
+
+        mainObjs[n].SetActive(!mainObjs[n].activeSelf);
+    }
+
+    public void ActiveSystemPanel(string msg)
+    {
+        mainObjs[1].SetActive(true);
+        systemTxt.text = msg;
+        uiObjs.Add(mainObjs[1]);
     }
 }
