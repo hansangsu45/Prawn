@@ -37,25 +37,21 @@ public class ShopManager : MonoBehaviour
 
     public void SellPrawn()  //새우 팔기
     {
-        if (GameManager.Instance.IsPrawnPossession(SelectedPrawn.id))
-        {
-            GameManager.Instance.savedData.prawns.Remove(GameManager.Instance.idToPrawn[SelectedPrawn.id]);
-        }
+        GameManager.Instance.savedData.coin += GameManager.Instance.idToPrawn[SelectedPrawn.id].price;
+        GameManager.Instance.SetData();
+        GameManager.Instance.savedData.prawns.Remove(GameManager.Instance.idToPrawn[SelectedPrawn.id]);
+        GameManager.Instance.idToPrawn.Remove(SelectedPrawn.id);
         //구매하기 버튼 띄우기
     }
 
     public void ChangePrawn()  //새우 교체
     {
         GameManager.Instance.SaveData();
-        foreach (Prawn p in GameManager.Instance.savedData.prawns)
-        {
-            if (p.id == SelectedPrawn.id)
-            {
-                GameManager.Instance.savedData.currentPrawn = p;
-                GameManager.Instance.myPrawn.PrawnLoad(p);
-                GameManager.Instance.SetData();
-                break;
-            }
-        }
+
+        Prawn p= GameManager.Instance.idToPrawn[SelectedPrawn.id];
+
+        GameManager.Instance.savedData.currentPrawn = p;
+        GameManager.Instance.myPrawn.PrawnLoad(p);
+        GameManager.Instance.SetData();
     }
 }

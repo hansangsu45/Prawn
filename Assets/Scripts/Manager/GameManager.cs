@@ -6,19 +6,36 @@ using System.Text;
 using System.IO;
 using System;
 
+public enum Color_State
+{
+    BLACK,
+    WHITE,
+    RED,
+    BLUE,
+    YELLOW,
+    GREEN,
+    PURPLE,
+    MAGENTA,
+    CYAN,
+    CLEAR,
+    GRAY,
+    ORANGE
+}
+
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] SaveData saveData;
+    [SerializeField] private SaveData saveData;  
     public SaveData savedData { get { return saveData; } }
     public ShopManager shopManager;
     public Dictionary<int, Prawn> idToPrawn;
+    public Dictionary<Color_State, Color> eColor;
 
     private Animator prawnAnimator;
 
     private string filePath;
     private readonly string SaveFileName = "Savefile";
-    string savedJson;
-    Coroutine AutoTchCo;  //자동으로 새우가 돈 벌게 하는 코루틴
+    private string savedJson;
+    private Coroutine AutoTchCo;  //자동으로 새우가 돈 벌게 하는 코루틴
     public GameObject BlackPanel;  //로딩 처리를 위한 검은색 바탕
 
     public MyPrawn myPrawn;
@@ -27,8 +44,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     [Header("메인씬에서 쓰이는 껐다켰다하는 UI들")]
     public GameObject[] mainObjs;
-    [Header("뒤로가기 버튼으로 없앨 수 있는 UI들")]
-    public List<GameObject> uiObjs;
+    
+    public List<GameObject> uiObjs;   //뒤로가기 버튼으로 없앨 수 있는 UI들
 
     public Image hpImage, mentalImage;
     public Text hpTxt, mentalTxt, systemTxt;
@@ -91,8 +108,6 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(SpawnFish());
     }
 
-    
-
     #region 저장/로드
     public void Save()  //저장
     {
@@ -146,6 +161,21 @@ public class GameManager : MonoSingleton<GameManager>
 
         for(int i=0; i<saveData.prawns.Count; i++)
             idToPrawn.Add(saveData.prawns[i].id, saveData.prawns[i]);
+
+        eColor = new Dictionary<Color_State, Color>();
+
+        eColor.Add(Color_State.BLACK, Color.black);
+        eColor.Add(Color_State.BLUE, Color.blue);
+        eColor.Add(Color_State.GREEN, Color.green);
+        eColor.Add(Color_State.PURPLE, new Color(193,0,255,255));
+        eColor.Add(Color_State.RED, Color.red);
+        eColor.Add(Color_State.WHITE, Color.white);
+        eColor.Add(Color_State.YELLOW, Color.yellow);
+        eColor.Add(Color_State.MAGENTA, Color.magenta);
+        eColor.Add(Color_State.CYAN, Color.cyan);
+        eColor.Add(Color_State.CLEAR, Color.clear);
+        eColor.Add(Color_State.GRAY, Color.gray);
+        eColor.Add(Color_State.ORANGE, new Color(255, 99, 0, 255));
     }
 
     #endregion
@@ -153,7 +183,10 @@ public class GameManager : MonoSingleton<GameManager>
     public void Touch()  //화면 터치
     {
         if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
+        {
+            ActiveSystemPanel("체력 혹은 정신력이 부족합니다.");
             return;
+        }
 
         saveData.coin += saveData.currentPrawn.power;
         coinTxt.text = saveData.coin.ToString();
@@ -171,7 +204,7 @@ public class GameManager : MonoSingleton<GameManager>
         prawnAnimator.Play("PrawnAnimation");
     }
 
-    IEnumerator AutoTouch()  //자동 터치 코루틴
+    private IEnumerator AutoTouch()  //자동 터치 코루틴
     {
         while(saveData.currentPrawn.isAutoWork)
         {
@@ -245,10 +278,12 @@ public class GameManager : MonoSingleton<GameManager>
         mainObjs[n].SetActive(!mainObjs[n].activeSelf);
     }
 
-    public void ActiveSystemPanel(string msg)  //시스템 메세지 띄우는 패널(함수)
+    public void ActiveSystemPanel(string msg, Color_State _color=Color_State.BLACK, int font_size=95)  //시스템 메세지 띄우는 패널(함수)
     {
         mainObjs[1].SetActive(true);
         systemTxt.text = msg;
+        systemTxt.color = eColor[_color];
+        systemTxt.fontSize = font_size;
         uiObjs.Add(mainObjs[1]);
     }
 
