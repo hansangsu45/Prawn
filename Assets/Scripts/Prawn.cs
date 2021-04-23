@@ -26,7 +26,7 @@ public class Prawn
     public int curMental; //현재 정신력
     public int str;  //공격력
     public int def;  //방어력
-    public int price;
+    public int price;  // 판매 가격
     public int foodAmount;  //필요 먹이량
     public int touchCount=0; //터치 횟수
     public int maxTouchCount;  //터치 최대 횟수(최대 횟수 도달시 먹이주거나 휴식)

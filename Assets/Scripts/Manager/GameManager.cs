@@ -11,20 +11,23 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] SaveData saveData;
     public SaveData savedData { get { return saveData; } }
     public ShopManager shopManager;
+    public Dictionary<int, Prawn> idToPrawn;
 
     private Animator prawnAnimator;
 
     private string filePath;
     private readonly string SaveFileName = "Savefile";
     string savedJson;
-    Coroutine AutoTchCo;
-    public GameObject BlackPanel;
+    Coroutine AutoTchCo;  //자동으로 새우가 돈 벌게 하는 코루틴
+    public GameObject BlackPanel;  //로딩 처리를 위한 검은색 바탕
 
     public MyPrawn myPrawn;
     public Sprite[] prawnSprs;
     public Text coinTxt;
 
+    [Header("메인씬에서 쓰이는 껐다켰다하는 UI들")]
     public GameObject[] mainObjs;
+    [Header("뒤로가기 버튼으로 없앨 수 있는 UI들")]
     public List<GameObject> uiObjs;
 
     public Image hpImage, mentalImage;
@@ -88,8 +91,10 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(SpawnFish());
     }
 
+    
+
     #region 저장/로드
-    public void Save()
+    public void Save()  //저장
     {
         SaveData();
         savedJson = JsonUtility.ToJson(saveData);
@@ -98,7 +103,7 @@ public class GameManager : MonoSingleton<GameManager>
         File.WriteAllText(filePath, code);
     }
 
-    public void Load()
+    public void Load()  //불러오기
     {
         if(File.Exists(filePath))
         {
@@ -109,13 +114,14 @@ public class GameManager : MonoSingleton<GameManager>
             DataLoad();
         }
     }
-    private void DataLoad()
+    private void DataLoad()  
     { 
         myPrawn.PrawnLoad(saveData.currentPrawn);
         SetData();
+        InitDict();
         AutoTchCo =StartCoroutine(AutoTouch());
     }    
-    public void SaveData()
+    public void SaveData()  
     {
         foreach(Prawn p in saveData.prawns)
         {
@@ -126,7 +132,7 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
-    public void SetData()
+    public void SetData()  
     {
         coinTxt.text = saveData.coin.ToString();
         hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
@@ -134,10 +140,17 @@ public class GameManager : MonoSingleton<GameManager>
         mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
         mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
     }
+    private void InitDict()
+    {
+        idToPrawn = new Dictionary<int, Prawn>();
+
+        for(int i=0; i<saveData.prawns.Count; i++)
+            idToPrawn.Add(saveData.prawns[i].id, saveData.prawns[i]);
+    }
 
     #endregion
 
-    public void Touch()
+    public void Touch()  //화면 터치
     {
         if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
             return;
@@ -158,13 +171,13 @@ public class GameManager : MonoSingleton<GameManager>
         prawnAnimator.Play("PrawnAnimation");
     }
 
-    IEnumerator AutoTouch()
+    IEnumerator AutoTouch()  //자동 터치 코루틴
     {
         while(saveData.currentPrawn.isAutoWork)
         {
+            yield return new WaitForSeconds(1);
             saveData.coin += saveData.currentPrawn.autoPowor;
             coinTxt.text = saveData.coin.ToString();
-            yield return new WaitForSeconds(1);
         }
     }
 
@@ -196,7 +209,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    public IEnumerator FadeEffect(Image img, float fadeTime=1f)
+    public IEnumerator FadeEffect(Image img, float fadeTime=1f)  //이미지 fadein/out
     {
         float t = fadeTime / 100;
         Color c = img.color;
@@ -224,7 +237,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    public void ButtonUIClick(int n)
+    public void ButtonUIClick(int n)  //메인씬의 UI On/Off시 사용할 함수
     {
         if (mainObjs[n].activeSelf) uiObjs.Remove(mainObjs[n]);
         else uiObjs.Add(mainObjs[n]);
@@ -232,7 +245,7 @@ public class GameManager : MonoSingleton<GameManager>
         mainObjs[n].SetActive(!mainObjs[n].activeSelf);
     }
 
-    public void ActiveSystemPanel(string msg)
+    public void ActiveSystemPanel(string msg)  //시스템 메세지 띄우는 패널(함수)
     {
         mainObjs[1].SetActive(true);
         systemTxt.text = msg;
@@ -271,5 +284,15 @@ public class GameManager : MonoSingleton<GameManager>
             randomWaitSecond = UnityEngine.Random.Range(fishMinTime, fishMaxTime);
             yield return new WaitForSeconds(randomWaitSecond);
         }
+    }
+
+    public bool IsPrawnPossession(int compareId)  //어떤 새우가 현재 자신에게 보유중인지 체크할 함수
+    {
+        foreach(Prawn p in saveData.prawns)
+        {
+            if (p.id == compareId)
+                return true;
+        }
+        return false;
     }
 }

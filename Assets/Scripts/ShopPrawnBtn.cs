@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙는 스크립트
 {
-    [SerializeField] int buyPrice;
+    [SerializeField] int buyPrice;  //새우 가격
 
     [SerializeField] bool isAuto;
     public short id;
@@ -24,12 +24,14 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
     [SerializeField] string ex;
     public Sprite spr;
 
-    public void ClickPurchase()
+    public void ClickPurchase()  //새우 구매(ShopManager에서 사용될 함수)
     {
         if(GameManager.Instance.savedData.coin>=buyPrice)
         {
             GameManager.Instance.savedData.coin -= buyPrice;
-            GameManager.Instance.savedData.prawns.Add(new Prawn(isAuto,id,maxHp,needHp,mental,str,def,sellPrice,foodAmt,maxTchCnt,power,auPower,restTime,_name,ex,spr));
+            Prawn p = new Prawn(isAuto, id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, maxTchCnt, power, auPower, restTime, _name, ex, spr);
+            GameManager.Instance.savedData.prawns.Add(p);
+            GameManager.Instance.idToPrawn.Add(id, p);
         }
         else
         {
@@ -37,7 +39,7 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
         }
     }
 
-    public void ClickPrawnofShop()
+    public void ClickPrawnofShop() //해당 스크립트가 붙은 버튼 클릭 시
     {
         GameManager.Instance.shopManager.SelectPrawn(GetComponent<Button>(), this);
     }
