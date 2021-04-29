@@ -12,7 +12,9 @@ public class ShopManager : MonoBehaviour
 
     public GameObject possessionPanel;
     public GameObject noPossession;
+    public GameObject up;
     public Text prawnExplain;
+    public Text reinforceTxt;
     public Image prawnImage;
 
     public void SelectPrawn(Button btn, ShopPrawnBtn spb)  //상점에서 새우 버튼 클릭 시
@@ -25,14 +27,21 @@ public class ShopManager : MonoBehaviour
     public void PrawnDetail()  //mainBtn클릭하면 새로 나오는 새우 자세히 보기 패널을 활성화 할 때의 함수
     {
         //   패널 띄우기       보유중이면 설명,팔기,바꾸기 띄우기       그렇지않으면 구매하기 띄우기
+        up.SetActive(false);
         bool isPoss = GameManager.Instance.IsPrawnPossession(SelectedPrawn.id);
 
         possessionPanel.SetActive(isPoss);
         noPossession.SetActive(!isPoss);
         if (isPoss)
         {
+            string str=$"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
             prawnExplain.text = GameManager.Instance.savedData.currentPrawn.explain;
             prawnImage.sprite = GameManager.Instance.savedData.currentPrawn.spr;
+            if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice)
+            {
+                up.SetActive(true);
+                str += "\n업그레이드 가능!";
+            }
         }
     }
 
