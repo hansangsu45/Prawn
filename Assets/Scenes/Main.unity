@@ -176,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.5509434, g: 0.9394149, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.34117648, g: 0.7254902, b: 0.83137256, a: 0.9098039}
+  m_Color: {r: 0.34117648, g: 0.7254902, b: 0.83137256, a: 0.31764707}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1902,7 +1902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.3339622, g: 0.8578646, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2056,7 +2056,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2130,6 +2130,7 @@ MonoBehaviour:
       maxTouchCount: 0
       power: 0
       autoPowor: 0
+      upgradePrice: 0
       restTime: 0
       currentRestTime: 0
       name: 
@@ -2887,7 +2888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 0.49803922}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3384,6 +3385,11 @@ MonoBehaviour:
   mainBtn: {fileID: 0}
   SelectedPrawnButton: {fileID: 0}
   SelectedPrawn: {fileID: 0}
+  prawnBtns: []
+  possessionPanel: {fileID: 0}
+  noPossession: {fileID: 0}
+  prawnExplain: {fileID: 0}
+  prawnImage: {fileID: 0}
 --- !u!4 &2015141175
 Transform:
   m_ObjectHideFlags: 0
