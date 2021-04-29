@@ -2144,6 +2144,7 @@ MonoBehaviour:
   mainObjs:
   - {fileID: 37447293}
   - {fileID: 1780080991}
+  - {fileID: 1209020416}
   uiObjs: []
   hpImage: {fileID: 241556273}
   mentalImage: {fileID: 121987576}

@@ -44,7 +44,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     [Header("메인씬에서 쓰이는 껐다켰다하는 UI들")]
     public GameObject[] mainObjs;
-    
+
+    [Header("건들면 안됨")]
     public List<GameObject> uiObjs;   //뒤로가기 버튼으로 없앨 수 있는 UI들
 
     public Image hpImage, mentalImage;
@@ -80,7 +81,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 300, 10, 0, 300, "흰다리 새우","(기본 새우 설명)" ,prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 300, 10, 0,2000, 300, "흰다리 새우","(기본 새우 설명)" ,prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             DataLoad();
             saveData.isFirstStart = false;
@@ -276,6 +277,7 @@ public class GameManager : MonoSingleton<GameManager>
         else uiObjs.Add(mainObjs[n]);
 
         mainObjs[n].SetActive(!mainObjs[n].activeSelf);
+        shopManager.UpgradeRenewal();
     }
 
     public void ActiveSystemPanel(string msg, Color_State _color=Color_State.BLACK, int font_size=95)  //시스템 메세지 띄우는 패널(함수)
