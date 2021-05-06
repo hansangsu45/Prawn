@@ -10,45 +10,61 @@ public class ShopManager : MonoBehaviour
     public ShopPrawnBtn SelectedPrawn;  //상점에서 각각의 새우버튼에 붙어있는 클래스
     public ShopPrawnBtn[] prawnBtns;
 
-    public GameObject possessionPanel;
-    public GameObject noPossession;
-    public GameObject up;
+    public GameObject[] possessionPanel;
+    public GameObject[] noPossession;
+    public GameObject up, up2;
     public Text prawnExplain;
     public Text reinforceTxt;
+    public Text prawnNameTxt, prawnNameTxtInDetail, prawnAbilTxt;
     public Image prawnImage;
+
+    private void Start()
+    {
+        SelectedPrawnButton = prawnBtns[0].GetComponent<Button>();
+        SelectedPrawn = prawnBtns[0];
+    }
 
     public void SelectPrawn(Button btn, ShopPrawnBtn spb)  //상점에서 새우 버튼 클릭 시
     {
         SelectedPrawnButton = btn;
         SelectedPrawn = spb;
         mainBtn.image.sprite = spb.spr;
+        prawnNameTxt.text = spb._name;
     }
 
     public void PrawnDetail()  //mainBtn클릭하면 새로 나오는 새우 자세히 보기 패널을 활성화 할 때의 함수
     {
-        //   패널 띄우기       보유중이면 설명,팔기,바꾸기 띄우기       그렇지않으면 구매하기 띄우기
+           //이제 새우 능력치 텍스트 띄워야함
         up.SetActive(false);
+        up2.SetActive(false);
         bool isPoss = GameManager.Instance.IsPrawnPossession(SelectedPrawn.id);
 
-        possessionPanel.SetActive(isPoss);
-        noPossession.SetActive(!isPoss);
+        prawnNameTxtInDetail.text = SelectedPrawn._name;
+        prawnExplain.text = SelectedPrawn.ex;
+        prawnImage.sprite = SelectedPrawn.spr;
+
+        foreach (GameObject o in possessionPanel) o.SetActive(isPoss);
+        foreach (GameObject o in noPossession) o.SetActive(!isPoss);
+
         if (isPoss)
         {
+            up.SetActive(true);
             string str=$"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
-            prawnExplain.text = GameManager.Instance.savedData.currentPrawn.explain;
-            prawnImage.sprite = GameManager.Instance.savedData.currentPrawn.spr;
             if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice)
             {
-                up.SetActive(true);
+                up2.SetActive(true);
                 str += "\n업그레이드 가능!";
             }
+            reinforceTxt.text = str;
         }
     }
 
     public void PurchasePrawn()  //새우 구입 버튼 클릭
     {
         SelectedPrawn.ClickPurchase();
-        //구매하기 버튼 없애고 설명,팔기,바꾸기 띄우기
+        noPossession[0].SetActive(false);
+        for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(true);
+        GameManager.Instance.SetData();
     }
 
     public void SellPrawn()  //새우 팔기
@@ -62,7 +78,9 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.SetData();
         GameManager.Instance.savedData.prawns.Remove(GameManager.Instance.idToPrawn[SelectedPrawn.id]);
         GameManager.Instance.idToPrawn.Remove(SelectedPrawn.id);
-        //구매하기 버튼 띄우기
+
+        noPossession[0].SetActive(true);
+        for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(false);
     }
 
     public void ChangePrawn()  //새우 교체

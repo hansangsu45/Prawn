@@ -81,7 +81,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 10, 0,2000, 300, "흰다리 새우","(기본 새우 설명)" ,prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 10, 0,2000, 300, "흰다리새우","(기본 새우 설명)" ,prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             DataLoad();
             saveData.isFirstStart = false;

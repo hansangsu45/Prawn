@@ -19,8 +19,8 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
     [SerializeField] int power;
     [SerializeField] int auPower;
     [SerializeField] float restTime;
-    [SerializeField] string _name;
-    [SerializeField] string ex;
+    public string _name;
+    public string ex;
     [SerializeField] int up;
     public Sprite spr;
     public GameObject upgrade;
