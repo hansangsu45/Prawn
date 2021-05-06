@@ -57,6 +57,10 @@ public class ShopManager : MonoBehaviour
             }
             reinforceTxt.text = str;
         }
+        else
+        {
+            prawnAbilTxt.text = $"가격:{SelectedPrawn.buyPrice}";
+        }
     }
 
     public void PurchasePrawn()  //새우 구입 버튼 클릭
@@ -65,6 +69,7 @@ public class ShopManager : MonoBehaviour
         noPossession[0].SetActive(false);
         for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(true);
         GameManager.Instance.SetData();
+        GameManager.Instance.ActiveSystemPanel($"{SelectedPrawn._name} 구매 성공!",Color_State.GREEN);
     }
 
     public void SellPrawn()  //새우 팔기
@@ -81,6 +86,8 @@ public class ShopManager : MonoBehaviour
 
         noPossession[0].SetActive(true);
         for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(false);
+
+        GameManager.Instance.ActiveSystemPanel("판매 완료!",Color_State.BLACK,100);
     }
 
     public void ChangePrawn()  //새우 교체
@@ -92,6 +99,8 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.savedData.currentPrawn = p;
         GameManager.Instance.myPrawn.PrawnLoad(p);
         GameManager.Instance.SetData();
+
+        GameManager.Instance.ActiveSystemPanel(p.name + "로 교체하였습니다.");
     }
 
     public void UpgradeRenewal()
