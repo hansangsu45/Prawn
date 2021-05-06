@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Reinforce : MonoBehaviour
 {
+    [SerializeField] private int minFoodAmount = 3;
+    [SerializeField] private int minRestTime = 60;
+
     public void reinforce()
     {
         GameManager gameManager = GameManager.Instance;
@@ -14,8 +17,31 @@ public class Reinforce : MonoBehaviour
         {
             currentPrawn.level += 1;
             gameManager.savedData.coin -= upgradePrice;
-            //여기부터 값이 달라짐
-            currentPrawn.maxHp += 20;
+
+            currentPrawn.hp += 50;
+            currentPrawn.str += 110;
+            currentPrawn.def += 5;
+
+            if (currentPrawn.restTime > minRestTime)
+            {
+                currentPrawn.restTime -= 30;
+
+                if(currentPrawn.restTime < minRestTime)
+                {
+                    currentPrawn.restTime = minRestTime;
+                }
+            }
+
+            if (currentPrawn.foodAmount > minFoodAmount)
+            {
+                currentPrawn.foodAmount -= 1;
+
+                if (currentPrawn.foodAmount < minFoodAmount)
+                {
+                    currentPrawn.foodAmount = minFoodAmount;
+                }
+            }
+
             gameManager.savedData.currentPrawn = currentPrawn;
             gameManager.SetData();
         }
