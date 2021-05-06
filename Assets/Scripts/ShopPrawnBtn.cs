@@ -16,7 +16,6 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
     [SerializeField] int def;
     [SerializeField] int sellPrice;
     [SerializeField] int foodAmt;
-    [SerializeField] int maxTchCnt;
     [SerializeField] int power;
     [SerializeField] int auPower;
     [SerializeField] float restTime;
@@ -31,7 +30,7 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
         if(GameManager.Instance.savedData.coin>=buyPrice)
         {
             GameManager.Instance.savedData.coin -= buyPrice;
-            Prawn p = new Prawn(isAuto, id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, maxTchCnt, power, auPower, up, restTime, _name, ex, spr);
+            Prawn p = new Prawn(isAuto, id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, power, auPower, up, restTime, _name, ex, spr);
             GameManager.Instance.savedData.prawns.Add(p);
             GameManager.Instance.idToPrawn.Add(id, p);
         }

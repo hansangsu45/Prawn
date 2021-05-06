@@ -29,7 +29,7 @@ public class Prawn
     public int price;  // 판매 가격
     public int foodAmount;  //필요 먹이량
     public int touchCount=0; //터치 횟수
-    public int maxTouchCount;  //터치 최대 횟수(최대 횟수 도달시 먹이주거나 휴식)
+    //public int maxTouchCount;  //터치 최대 횟수(최대 횟수 도달시 먹이주거나 휴식)
     public int power; //1회 터치당 벌어들이는 돈
     public int autoPowor; //초당 자동으로 벌어들이는 돈
     public int upgradePrice; //업그레이드에 필요한 돈
@@ -42,7 +42,7 @@ public class Prawn
 
     public Sprite spr;
 
-    public Prawn(bool isAuto, short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int maxTouchCnt,int power,int auPower,int up , float restTime, string name,string ex ,Sprite spr)
+    public Prawn(bool isAuto, short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int power,int auPower,int up , float restTime, string name,string ex ,Sprite spr)
     {
         this.isAutoWork = isAuto;
         this.id = id;
@@ -53,7 +53,7 @@ public class Prawn
         this.def = def;
         this.price = price;
         this.foodAmount = foodAmount;
-        this.maxTouchCount = maxTouchCnt;
+        //this.maxTouchCount = maxTouchCnt;
         this.power = power;
         this.autoPowor = auPower;
         this.upgradePrice = up;
