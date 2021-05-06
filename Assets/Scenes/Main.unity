@@ -155,7 +155,7 @@ RectTransform:
   - {fileID: 114168597}
   - {fileID: 1684152966}
   m_Father: {fileID: 523279595}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -725,7 +725,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 230228619}
-  - component: {fileID: 230228620}
   m_Layer: 0
   m_Name: FishPooling
   m_TagString: Untagged
@@ -750,18 +749,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &230228620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 230228618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6611e26698aeca04ba9ba6f51b8d2c5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &241556271
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,7 +856,7 @@ RectTransform:
   m_Children:
   - {fileID: 1280646383}
   m_Father: {fileID: 523279595}
-  m_RootOrder: 10
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1151,10 +1138,10 @@ RectTransform:
   - {fileID: 1679304432}
   - {fileID: 178324729}
   - {fileID: 1755800748}
+  - {fileID: 348682797}
   - {fileID: 37447294}
   - {fileID: 1209020417}
   - {fileID: 1780080992}
-  - {fileID: 348682797}
   - {fileID: 1297864610}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -2058,7 +2045,7 @@ RectTransform:
   - {fileID: 1777505995}
   - {fileID: 857944460}
   m_Father: {fileID: 523279595}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3123,7 +3110,7 @@ RectTransform:
   - {fileID: 1258744427}
   - {fileID: 58914114}
   m_Father: {fileID: 523279595}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3644,7 +3631,9 @@ MonoBehaviour:
   prawnBtns: []
   possessionPanel: {fileID: 0}
   noPossession: {fileID: 0}
+  up: {fileID: 0}
   prawnExplain: {fileID: 0}
+  reinforceTxt: {fileID: 0}
   prawnImage: {fileID: 0}
 --- !u!4 &2015141175
 Transform:

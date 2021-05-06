@@ -54,7 +54,7 @@ public class GameManager : MonoSingleton<GameManager>
     #region 물고기 움직임 관련 변수
     //랜덤 위치 (maxPosition minPosition) 제한
     //랜덤 초 기다림 (max time min time) 제한
-    private FishPooling fishPooling;
+    private GameObject fishPooling;
 
     [Header("물고기 스폰 관련 변수")]
     [Tooltip("물고기 스폰 위치 최소 제한")]
@@ -88,7 +88,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
 
         prawnAnimator = myPrawn.GetComponent<Animator>();
-        fishPooling = FindObjectOfType<FishPooling>();
+        fishPooling = GameObject.Find("FishPooling");
 
         #region (혹시 잘못되면 바로 알아볼 수 있도록 코드 추가함) fishPooling 관련 예외 처리 (유니티 안에서만 실행됨)
 #if UNITY_EDITOR

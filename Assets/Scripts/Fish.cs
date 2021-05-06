@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
-    private FishPooling fishPooling;
+    private GameObject fishPooling;
 
     private Vector2 targetPosition;
 
@@ -15,7 +15,7 @@ public class Fish : MonoBehaviour
 
     private void Awake()
     {
-        fishPooling = FindObjectOfType<FishPooling>();
+        fishPooling = GameObject.Find("FishPooling");
     }
 
     private void Update()
