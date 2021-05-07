@@ -33,6 +33,7 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
             Prawn p = new Prawn(isAuto, id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, power, auPower, up, restTime, _name, ex, spr);
             GameManager.Instance.savedData.prawns.Add(p);
             GameManager.Instance.idToPrawn.Add(id, p);
+            GameManager.Instance.shopManager.PurchaseSuccess();
         }
         else
         {

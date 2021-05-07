@@ -29,6 +29,8 @@ public class GameManager : MonoSingleton<GameManager>
     public ShopManager shopManager;
     public Dictionary<int, Prawn> idToPrawn;
     public Dictionary<Color_State, Color> eColor;
+    private bool bQuitPanel = false;
+    [SerializeField] GameObject[] g_objs;
 
     private Animator prawnAnimator;
 
@@ -223,10 +225,12 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 uiObjs[uiObjs.Count - 1].SetActive(false);
                 uiObjs.RemoveAt(uiObjs.Count - 1);
+                if (bQuitPanel) bQuitPanel = false;
             }
             else
             {
-                //게임종료 패널 띄우기
+                bQuitPanel = true;
+                ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
             }
         }
     }
@@ -242,6 +246,8 @@ public class GameManager : MonoSingleton<GameManager>
             Save();
         }
     }
+
+    public void GameQuit() => Application.Quit();
 
     public IEnumerator FadeEffect(Image img, float fadeTime=1f)  //이미지 fadein/out
     {
@@ -287,6 +293,9 @@ public class GameManager : MonoSingleton<GameManager>
         systemTxt.color = eColor[_color];
         systemTxt.fontSize = font_size;
         uiObjs.Add(mainObjs[1]);
+
+        g_objs[0].SetActive(!bQuitPanel);
+        g_objs[1].SetActive(bQuitPanel);
     }
 
     private IEnumerator SpawnFish()

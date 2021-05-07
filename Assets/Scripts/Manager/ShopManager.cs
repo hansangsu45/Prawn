@@ -66,17 +66,36 @@ public class ShopManager : MonoBehaviour
     public void PurchasePrawn()  //새우 구입 버튼 클릭
     {
         SelectedPrawn.ClickPurchase();
+    }
+
+    public void PurchaseSuccess()  //새우 구매 성공
+    {
         noPossession[0].SetActive(false);
         for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(true);
         GameManager.Instance.SetData();
-        GameManager.Instance.ActiveSystemPanel($"{SelectedPrawn._name} 구매 성공!",Color_State.GREEN);
+        GameManager.Instance.ActiveSystemPanel($"{SelectedPrawn._name} 구매 성공!", Color_State.GREEN);
+
+        //prawnAbilTxt.text= 나중에
+        up.SetActive(true);
+        string str = $"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
+        if (GameManager.Instance.savedData.coin >= GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice)
+        {
+            up2.SetActive(true);
+            str += "\n업그레이드 가능!";
+        }
+        reinforceTxt.text = str;
     }
 
     public void SellPrawn()  //새우 팔기
     {
-        if(GameManager.Instance.savedData.currentPrawn.id==SelectedPrawn.id)
+        if(GameManager.Instance.savedData.currentPrawn.id==SelectedPrawn.id)  //착용중인 새우 판매 막기
         {
             GameManager.Instance.ActiveSystemPanel("착용중인 새우는 팔 수 없습니다.", Color_State.RED,93);
+            return;
+        }
+        if(SelectedPrawn.id==10)  //기본 새우 판매 막기
+        {
+            GameManager.Instance.ActiveSystemPanel("해당 새우는 팔 수 없습니다.", Color_State.RED);
             return;
         }
         GameManager.Instance.savedData.coin += GameManager.Instance.idToPrawn[SelectedPrawn.id].price;
@@ -86,6 +105,9 @@ public class ShopManager : MonoBehaviour
 
         noPossession[0].SetActive(true);
         for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(false);
+        up.SetActive(false);
+        SelectedPrawn.upgrade.SetActive(false);
+        prawnAbilTxt.text = $"가격:{SelectedPrawn.buyPrice}";
 
         GameManager.Instance.ActiveSystemPanel("판매 완료!",Color_State.BLACK,100);
     }
