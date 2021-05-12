@@ -8,6 +8,7 @@ public class SaveData
     public List<Prawn> prawns = new List<Prawn>();  //보유중인 새우
     public bool isFirstStart = true;  //게임 처음 시작인지
     public long coin;  //보유중인 돈
+    public int foodCount;  //먹이 수
     public Prawn currentPrawn;  //현재 착용중인 새우
 }
 
