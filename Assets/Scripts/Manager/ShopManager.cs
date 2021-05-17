@@ -18,6 +18,9 @@ public class ShopManager : MonoBehaviour
     public Text prawnNameTxt, prawnNameTxtInDetail, prawnAbilTxt;
     public Image prawnImage;
 
+    public Animator menuAni;
+    public bool bMenuOpen = false;
+
     private void Start()
     {
         SelectedPrawnButton = prawnBtns[0].GetComponent<Button>();
@@ -141,5 +144,12 @@ public class ShopManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void MenuAni(bool b)
+    {
+        //bMenuOpen = !bMenuOpen;
+        menuAni.SetBool("menu", b);
+       
     }
 }

@@ -52,6 +52,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public Image hpImage, mentalImage;
     public Text hpTxt, mentalTxt, systemTxt;
+    public GameObject[] menus;
+    public int[] menusNum;
 
     #region 물고기 움직임 관련 변수
     //랜덤 위치 (maxPosition minPosition) 제한
@@ -226,6 +228,15 @@ public class GameManager : MonoSingleton<GameManager>
                 uiObjs[uiObjs.Count - 1].SetActive(false);
                 uiObjs.RemoveAt(uiObjs.Count - 1);
                 if (bQuitPanel) bQuitPanel = false;
+
+                if (!mainObjs[0].activeSelf && !mainObjs[3].activeSelf&& !mainObjs[4].activeSelf)
+                {
+                    shopManager.MenuAni(false);
+                    for (int i = 0; i < menus.Length; i++)
+                    {
+                        menus[i].transform.parent = mainObjs[0].transform;
+                    }
+                }
             }
             else
             {
@@ -284,6 +295,34 @@ public class GameManager : MonoSingleton<GameManager>
 
         mainObjs[n].SetActive(!mainObjs[n].activeSelf);
         shopManager.UpgradeRenewal();
+    }
+
+    public void ThreeMenu(int num)
+    {
+        if (!mainObjs[num].activeSelf)
+        {
+            shopManager.MenuAni(false);
+            for (int i = 0; i < menus.Length; i++)
+            {
+                menus[i].transform.parent = mainObjs[0].transform;
+            }
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < menus.Length; i++)
+            {
+                menus[i].transform.parent = mainObjs[num].transform;
+            }
+            for (int i = 0; i < menusNum.Length; i++)
+            {
+                if (menusNum[i] != num)
+                {
+                    mainObjs[menusNum[i]].SetActive(false);
+                }
+            }
+            shopManager.MenuAni(false);
+        }
     }
 
     public void ActiveSystemPanel(string msg, Color_State _color=Color_State.BLACK, int font_size=95)  //시스템 메세지 띄우는 패널(함수)
