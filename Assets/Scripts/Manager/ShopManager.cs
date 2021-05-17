@@ -17,6 +17,7 @@ public class ShopManager : MonoBehaviour
     public Text reinforceTxt;
     public Text prawnNameTxt, prawnNameTxtInDetail, prawnAbilTxt;
     public Image prawnImage;
+    public Text foodCtnTxt, autoCoinLv,autoBtnTxt;
 
     public Animator menuAni;
     public bool bMenuOpen = false;
@@ -151,5 +152,29 @@ public class ShopManager : MonoBehaviour
         //bMenuOpen = !bMenuOpen;
         menuAni.SetBool("menu", b);
        
+    }
+
+    public void AutoLVUp()
+    {
+        if(GameManager.Instance.savedData.coin>=GameManager.Instance.savedData.autoCoinUpPrice)
+        {
+            GameManager.Instance.savedData.coin -= GameManager.Instance.savedData.autoCoinUpPrice;
+            GameManager.Instance.savedData.autocoinLv++;
+            
+            if(!GameManager.Instance.savedData.isAutoCoin)
+            {
+                GameManager.Instance.savedData.isAutoCoin = true;
+                StartCoroutine(GameManager.Instance.AutoTouch());
+            }
+            GameManager.Instance.savedData.autoCoin = GameManager.Instance.savedData.nextAutoCoin;
+            GameManager.Instance.savedData.nextAutoCoin *= 2;
+            GameManager.Instance.savedData.autoCoinUpPrice *= 2;
+
+            GameManager.Instance.SetData();
+        }
+        else
+        {
+            GameManager.Instance.ActiveSystemPanel("돈이 부족합니다.");
+        }
     }
 }

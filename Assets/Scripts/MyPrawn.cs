@@ -7,12 +7,13 @@ public class MyPrawn : MonoBehaviour
 {
     private Prawn prawn;
 
-    [SerializeField] private Image prawnImage;
+    [SerializeField] private Image prawnImage, foodPanelPrawnImg;
      
     public void PrawnLoad(Prawn p)
     {
         prawn = p;
 
         prawnImage.sprite = p.spr;
+        foodPanelPrawnImg.sprite = p.spr;
     }
 }

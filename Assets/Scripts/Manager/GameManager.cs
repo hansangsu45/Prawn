@@ -27,6 +27,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private SaveData saveData;  
     public SaveData savedData { get { return saveData; } }
     public ShopManager shopManager;
+    public Food food;
     public Dictionary<int, Prawn> idToPrawn;
     public Dictionary<Color_State, Color> eColor;
     private bool bQuitPanel = false;
@@ -159,6 +160,10 @@ public class GameManager : MonoSingleton<GameManager>
         hpTxt.text = string.Format("HP: {0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
         mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
         mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
+        shopManager.foodCtnTxt.text = string.Format("보유중인 먹이 개수: {0}개", saveData.foodCount);
+        shopManager.autoCoinLv.text = $"{saveData.autocoinLv}레벨";
+        shopManager.autoBtnTxt.text = string.Format("자동 돈 복사 기계\n업그레이드({0}원)", saveData.autoCoinUpPrice);
+        food.needFoodTxt.text = string.Format("먹이주기\n(필요 개수: {0}개)", saveData.currentPrawn.foodAmount);
     }
     private void InitDict()
     {
@@ -209,12 +214,12 @@ public class GameManager : MonoSingleton<GameManager>
         prawnAnimator.Play("PrawnAnimation");
     }
 
-    private IEnumerator AutoTouch()  //자동 터치 코루틴
+    public IEnumerator AutoTouch()  //자동 터치 코루틴
     {
-        while(saveData.currentPrawn.isAutoWork)
+        while(saveData.isAutoCoin)
         {
             yield return new WaitForSeconds(1);
-            saveData.coin += saveData.currentPrawn.autoPowor;
+            saveData.coin += saveData.autoCoin;
             coinTxt.text = saveData.coin.ToString();
         }
     }

@@ -9,6 +9,11 @@ public class SaveData
     public bool isFirstStart = true;  //게임 처음 시작인지
     public long coin;  //보유중인 돈
     public int foodCount;  //먹이 수
+    public bool isAutoCoin = false;  //자동으로 돈 버는지
+    public int autoCoin = 0;  //자동으로 버는 돈
+    public int nextAutoCoin = 20; //다음 레벨 자동으로 버는 돈
+    public int autoCoinUpPrice = 40; //자동 코인 업글 비용
+    public int autocoinLv = 0;
     public Prawn currentPrawn;  //현재 착용중인 새우
 }
 
