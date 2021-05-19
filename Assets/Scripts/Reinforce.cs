@@ -18,7 +18,8 @@ public class Reinforce : MonoBehaviour
             currentPrawn.level += 1;
             gameManager.savedData.coin -= upgradePrice;
 
-            currentPrawn.hp += 50;
+            currentPrawn.maxHp += 50;
+            currentPrawn.hp = currentPrawn.maxHp;
             currentPrawn.str += 110;
             currentPrawn.def += 5;
 
