@@ -73,6 +73,22 @@ public class GameManager : MonoSingleton<GameManager>
 
     #endregion
 
+    #region 피버 타임 관련 변수
+
+    [Header("피버 타임 관련 변수")]
+    [Tooltip("피버 타임 텍스트")]
+    [SerializeField] private GameObject feverTimeText;
+    [Tooltip("피버 타임 시작까지 최소 시간")]
+    [SerializeField] private float feverStartMinTime;
+    [Tooltip("피버 타임 시작까지 최대 시간")]
+    [SerializeField] private float feverStartMaxTime;
+
+    private float lastFeverTime = 0f; //마지막 피버 타임
+    private float feverStartTime = 0f; //피버 스타트 타임
+    private bool isFeverTime = false; //현재 피버타임인지 확인
+
+    #endregion
+
     private void Awake()
     {
         Application.runInBackground = true;
@@ -112,6 +128,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         StartCoroutine(FadeEffect(BlackPanel.GetComponent<Image>()));
         StartCoroutine(SpawnFish());
+
+        FeverTimeReset();
     }
 
     #region 저장/로드
@@ -192,25 +210,35 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void Touch()  //화면 터치
     {
-        if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
+        if (isFeverTime)
         {
-            ActiveSystemPanel("체력 혹은 정신력이 부족합니다.");
-            return;
+            saveData.coin += saveData.currentPrawn.power * 2;
+            coinTxt.text = saveData.coin.ToString();
+            saveData.currentPrawn.touchCount++;
+        }
+        else
+        {
+            if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
+            {
+                ActiveSystemPanel("체력 혹은 정신력이 부족합니다.");
+                return;
+            }
+
+            saveData.coin += saveData.currentPrawn.power;
+            coinTxt.text = saveData.coin.ToString();
+            saveData.currentPrawn.touchCount++;
+            if (saveData.currentPrawn.touchCount % 5 == 0)
+            {
+                saveData.currentPrawn.curMental--;
+                mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
+                mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
+            }
+
+            saveData.currentPrawn.hp -= saveData.currentPrawn.needHp;
+            hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
+            hpTxt.text = string.Format("HP: {0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
         }
 
-        saveData.coin += saveData.currentPrawn.power;
-        coinTxt.text = saveData.coin.ToString();
-        saveData.currentPrawn.touchCount++;
-        if(saveData.currentPrawn.touchCount%5==0)
-        {
-            saveData.currentPrawn.curMental--;
-            mentalImage.fillAmount = (float)saveData.currentPrawn.curMental / (float)saveData.currentPrawn.mental;
-            mentalTxt.text = string.Format("MENTAL: {0}/{1}", saveData.currentPrawn.curMental, saveData.currentPrawn.mental);
-        }
-
-        saveData.currentPrawn.hp -= saveData.currentPrawn.needHp;
-        hpImage.fillAmount = (float)saveData.currentPrawn.hp / (float)saveData.currentPrawn.maxHp;
-        hpTxt.text = string.Format("HP: {0}/{1}", saveData.currentPrawn.hp, saveData.currentPrawn.maxHp);
         prawnAnimator.Play("PrawnAnimation");
     }
 
@@ -249,6 +277,8 @@ public class GameManager : MonoSingleton<GameManager>
                 ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
             }
         }
+
+        FeverTimeCheck();
     }
 
     private void OnApplicationQuit()
@@ -383,6 +413,34 @@ public class GameManager : MonoSingleton<GameManager>
             if (p.id == compareId)
                 return true;
         }
-        return false;
+        return false; 
+    }
+
+    private void FeverTimeReset()
+    {
+        feverStartTime = UnityEngine.Random.Range(feverStartMinTime, feverStartMaxTime);
+        lastFeverTime = Time.time;
+        isFeverTime = false;
+        feverTimeText.SetActive(false);
+    }
+
+    private void FeverTimeCheck()
+    {
+        if(!isFeverTime)
+        {
+            if (Time.time >= lastFeverTime + feverStartTime)
+            {
+                isFeverTime = true;
+                feverTimeText.SetActive(true);
+                lastFeverTime = Time.time;
+            }
+        }
+        else
+        {
+            if (Time.time >= lastFeverTime + 30f)
+            {
+                FeverTimeReset();
+            }
+        }
     }
 }
