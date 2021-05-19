@@ -13,6 +13,12 @@ public class Reinforce : MonoBehaviour
         Prawn currentPrawn = gameManager.savedData.currentPrawn;
         long upgradePrice = currentPrawn.upgradePrice;
 
+        if (currentPrawn.level >= 5)
+        {
+            gameManager.ActiveSystemPanel("레벨을 더 올릴 수 없습니다.");
+            return;
+        }
+
         if (gameManager.savedData.coin >= upgradePrice)
         {
             currentPrawn.level += 1;

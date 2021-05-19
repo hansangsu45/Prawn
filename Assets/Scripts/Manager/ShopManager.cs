@@ -135,7 +135,7 @@ public class ShopManager : MonoBehaviour
         {
             if(GameManager.Instance.IsPrawnPossession(prawnBtns[i].id))
             {
-                if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[prawnBtns[i].id].upgradePrice)
+                if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[prawnBtns[i].id].upgradePrice && GameManager.Instance.idToPrawn[prawnBtns[i].id].level < 5)
                 {
                     prawnBtns[i].upgrade.SetActive(true);
                 }
