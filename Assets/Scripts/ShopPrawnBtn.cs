@@ -7,7 +7,6 @@ public class ShopPrawnBtn : MonoBehaviour  //»óÁ¡¿¡ ÀÖ´Â °¢°¢ÀÇ »õ¿ì¹öÆ°µé¿¡ ºÙ´
 {
     public int buyPrice;  //»õ¿ì °¡°Ý
 
-    [SerializeField] bool isAuto;
     public short id;
     [SerializeField] int maxHp;
     [SerializeField] int needHp;
@@ -17,7 +16,6 @@ public class ShopPrawnBtn : MonoBehaviour  //»óÁ¡¿¡ ÀÖ´Â °¢°¢ÀÇ »õ¿ì¹öÆ°µé¿¡ ºÙ´
     [SerializeField] int sellPrice;
     [SerializeField] int foodAmt;
     [SerializeField] int power;
-    [SerializeField] int auPower;
     [SerializeField] float restTime;
     public string _name;
     public string ex;
@@ -30,7 +28,7 @@ public class ShopPrawnBtn : MonoBehaviour  //»óÁ¡¿¡ ÀÖ´Â °¢°¢ÀÇ »õ¿ì¹öÆ°µé¿¡ ºÙ´
         if(GameManager.Instance.savedData.coin>=buyPrice)
         {
             GameManager.Instance.savedData.coin -= buyPrice;
-            Prawn p = new Prawn(isAuto, id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, power, auPower, up, restTime, _name, ex, spr);
+            Prawn p = new Prawn(id, maxHp, needHp, mental, str, def, sellPrice, foodAmt, power, up, restTime, _name, ex, spr);
             GameManager.Instance.savedData.prawns.Add(p);
             GameManager.Instance.idToPrawn.Add(id, p);
             GameManager.Instance.shopManager.PurchaseSuccess();

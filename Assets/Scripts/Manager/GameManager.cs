@@ -102,7 +102,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(false, 10, 300,1 ,100, 100, 50, 0, 10, 10, 0,2000, 300, "흰다리새우","(기본 새우 설명)" ,prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(10, 300,1 ,100, 100, 50, 0, 10, 10,2000, 300, "흰다리새우","(기본 새우 설명)" ,prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             DataLoad();
             saveData.isFirstStart = false;
@@ -220,6 +220,11 @@ public class GameManager : MonoSingleton<GameManager>
         {
             if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
             {
+                if(saveData.currentPrawn.curMental <= 0)
+                {
+                    saveData.currentPrawn.isRest = true;
+                    saveData.currentPrawn.restStartTime = DateTime.Now;
+                }
                 ActiveSystemPanel("체력 혹은 정신력이 부족합니다.");
                 return;
             }
@@ -325,6 +330,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ButtonUIClick(int n)  //메인씬의 UI On/Off시 사용할 함수
     {
+        if (mainObjs[n].activeSelf && bQuitPanel) bQuitPanel = false;
+
         if (mainObjs[n].activeSelf) uiObjs.Remove(mainObjs[n]);
         else uiObjs.Add(mainObjs[n]);
 
