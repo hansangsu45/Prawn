@@ -50,7 +50,7 @@ public class ShopManager : MonoBehaviour
         foreach (GameObject o in possessionPanel) o.SetActive(isPoss);
         foreach (GameObject o in noPossession) o.SetActive(!isPoss);
 
-        if (isPoss)
+        if (isPoss && GameManager.Instance.idToPrawn[SelectedPrawn.id].level < 5)
         {
             up.SetActive(true);
             string str=$"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}·¹º§";
