@@ -218,12 +218,19 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else
         {
+            if(saveData.currentPrawn.isRest)
+            {
+                ActiveSystemPanel("휴식이 필요합니다.");
+                return;
+            }
+
             if (saveData.currentPrawn.hp < saveData.currentPrawn.needHp || saveData.currentPrawn.curMental <= 0)
             {
                 if(saveData.currentPrawn.curMental <= 0)
                 {
                     saveData.currentPrawn.isRest = true;
-                    saveData.currentPrawn.restStartTime = DateTime.Now;
+                    saveData.currentPrawn.restStartTime = DateTime.Now.ToString();
+                    SaveData();
                 }
                 ActiveSystemPanel("체력 혹은 정신력이 부족합니다.");
                 return;

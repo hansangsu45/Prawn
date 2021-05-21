@@ -33,12 +33,19 @@ public class Rest : MonoBehaviour
                 {
                     if (GameManager.Instance.idToPrawn[ids[i]].isRest)
                     {
-                        ts = DateTime.Now - GameManager.Instance.idToPrawn[ids[i]].restStartTime;
-                        //ts가 59를 넘으면 다시 1부터 시작하는 문제점 있다.
-                        if(ts.Seconds>=GameManager.Instance.idToPrawn[ids[i]].restTime)
+                        ts = DateTime.Now - Convert.ToDateTime(GameManager.Instance.idToPrawn[ids[i]].restStartTime);
+                        //Debug.Log(ts.TotalSeconds);
+                        if (ts.TotalSeconds>=GameManager.Instance.idToPrawn[ids[i]].restTime)
                         {
                             GameManager.Instance.idToPrawn[ids[i]].isRest = false;
                             GameManager.Instance.idToPrawn[ids[i]].curMental = GameManager.Instance.idToPrawn[ids[i]].mental;
+
+                            if(ids[i]==GameManager.Instance.savedData.currentPrawn.id)
+                            {
+                                GameManager.Instance.savedData.currentPrawn.isRest = false;
+                                GameManager.Instance.savedData.currentPrawn.curMental = GameManager.Instance.savedData.currentPrawn.mental;
+                            }
+
                             GameManager.Instance.SetData();
                         }
                     }
@@ -46,5 +53,4 @@ public class Rest : MonoBehaviour
             }
         }
     }
-
 }

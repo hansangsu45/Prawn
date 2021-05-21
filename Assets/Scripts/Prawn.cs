@@ -49,7 +49,7 @@ public class Prawn
 
     public Sprite spr;
 
-    public DateTime restStartTime;
+    public string restStartTime;
 
     public Prawn(short id,int maxHp,int needHp ,int mental, int str, int def, int price, int foodAmount,int power,int up , float restTime, string name,string ex ,Sprite spr)
     {
