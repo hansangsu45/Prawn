@@ -1,60 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Reinforce : MonoBehaviour
 {
-    [SerializeField] private int minFoodAmount = 3;
-    [SerializeField] private int minRestTime = 60;
+    [SerializeField] private Text _name;
+    [SerializeField] private Image image;
+    [SerializeField] private Text explanation;
+    [SerializeField] private Text state;
 
-    public void reinforce()
+    private ShopPrawnBtn shopPrawnBtn;
+    private Prawn prawn;
+    private GameManager gameManager;
+
+    private void Awake()
     {
-        GameManager gameManager = GameManager.Instance;
-        Prawn currentPrawn = gameManager.savedData.currentPrawn;
-        long upgradePrice = currentPrawn.upgradePrice;
+        gameManager = GameManager.Instance;
+    }
 
-        if (currentPrawn.level >= 5)
+    public void ReinforceBtnClick()
+    {
+        gameManager.ButtonUIClick(6);
+
+        shopPrawnBtn = gameManager.shopManager.SelectedPrawn;
+        prawn = gameManager.idToPrawn[shopPrawnBtn.id];
+
+        if (prawn.level >= 5)
         {
-            gameManager.ActiveSystemPanel("레벨을 더 올릴 수 없습니다.");
-            return;
+            gameManager.ActiveSystemPanel("최대레벨이어서 강화를 더이상 할 수 없습니다.");
+            gameManager.ButtonUIClick(6);
         }
+
+        _name.text = shopPrawnBtn._name;
+        image.sprite = shopPrawnBtn.spr;
+        explanation.text = shopPrawnBtn.ex;
+        state.text = $"체력 {prawn.maxHp}->{prawn.maxHp + 50}\n공격력 {prawn.str}->{prawn.str + 110}\n방어력 {prawn.def + 5}\n휴식시간 {prawn.restTime}초->{prawn.restTime - 5}초\n먹이량 {prawn.foodAmount}->{prawn.foodAmount - 1}\n가격 {prawn.upgradePrice}코인";
+    }
+
+    public void PrawnReinforce()
+    {
+        long upgradePrice = prawn.upgradePrice;
 
         if (gameManager.savedData.coin >= upgradePrice)
         {
-            currentPrawn.level += 1;
+            prawn.level += 1;
             gameManager.savedData.coin -= upgradePrice;
 
-            currentPrawn.maxHp += 50;
-            currentPrawn.hp = currentPrawn.maxHp;
-            currentPrawn.str += 110;
-            currentPrawn.def += 5;
+            prawn.maxHp += 50;
+            prawn.hp = prawn.maxHp;
+            prawn.str += 110;
+            prawn.def += 5;
+            prawn.restTime -= 5;
+            prawn.foodAmount -= 1;
 
-            if (currentPrawn.restTime > minRestTime)
-            {
-                currentPrawn.restTime -= 30;
-
-                if(currentPrawn.restTime < minRestTime)
-                {
-                    currentPrawn.restTime = minRestTime;
-                }
-            }
-
-            if (currentPrawn.foodAmount > minFoodAmount)
-            {
-                currentPrawn.foodAmount -= 1;
-
-                if (currentPrawn.foodAmount < minFoodAmount)
-                {
-                    currentPrawn.foodAmount = minFoodAmount;
-                }
-            }
-
-            gameManager.savedData.currentPrawn = currentPrawn;
             gameManager.SetData();
+            gameManager.shopManager.PrawnDetail();
+
+            gameManager.ActiveSystemPanel("강화에 성공하였습니다.");
         }
         else
         {
             gameManager.ActiveSystemPanel("돈이 부족합니다.");
         }
+
+        gameManager.ButtonUIClick(6);
     }
 }

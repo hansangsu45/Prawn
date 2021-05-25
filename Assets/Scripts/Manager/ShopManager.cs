@@ -50,11 +50,11 @@ public class ShopManager : MonoBehaviour
         foreach (GameObject o in possessionPanel) o.SetActive(isPoss);
         foreach (GameObject o in noPossession) o.SetActive(!isPoss);
 
-        if (isPoss && GameManager.Instance.idToPrawn[SelectedPrawn.id].level < 5)
+        if (isPoss)
         {
             up.SetActive(true);
             string str=$"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
-            if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice)
+            if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice && GameManager.Instance.idToPrawn[SelectedPrawn.id].level < 5)
             {
                 up2.SetActive(true);
                 str += "\n업그레이드 가능!";
