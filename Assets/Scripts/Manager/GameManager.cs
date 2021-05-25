@@ -102,7 +102,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (saveData.isFirstStart)
         {
-            saveData.prawns.Add(new Prawn(10, 300,1 ,100, 100, 50, 0, 10, 10,2000, 300, "흰다리새우","(기본 새우 설명)" ,prawnSprs[0]));
+            saveData.prawns.Add(new Prawn(10, 300,1 ,100, 100, 50, 0, 10, 10,2000, 300, "흰다리새우", "크기는 약20cm. 얕은 바다에 서식한다.전체적으로 대하와 유사하지만 더듬이와 수염이 짧다.", prawnSprs[0]));
             saveData.currentPrawn = saveData.prawns[0];
             DataLoad();
             saveData.isFirstStart = false;

@@ -110,7 +110,7 @@ public class ShopManager : MonoBehaviour
         noPossession[0].SetActive(true);
         for (int i = 0; i < possessionPanel.Length; i++) possessionPanel[i].SetActive(false);
         up.SetActive(false);
-        SelectedPrawn.upgrade.SetActive(false);
+        SelectedPrawn.transform.GetChild(0).gameObject.SetActive(false);
         prawnAbilTxt.text = $"가격:{SelectedPrawn.buyPrice}";
 
         GameManager.Instance.ActiveSystemPanel("판매 완료!",Color_State.BLACK,100);
@@ -137,11 +137,11 @@ public class ShopManager : MonoBehaviour
             {
                 if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[prawnBtns[i].id].upgradePrice && GameManager.Instance.idToPrawn[prawnBtns[i].id].level < 5)
                 {
-                    prawnBtns[i].upgrade.SetActive(true);
+                    prawnBtns[i].transform.GetChild(0).gameObject.SetActive(true);
                 }
                 else
                 {
-                    prawnBtns[i].upgrade.SetActive(false);
+                    prawnBtns[i].transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }

@@ -21,7 +21,6 @@ public class ShopPrawnBtn : MonoBehaviour  //상점에 있는 각각의 새우버튼들에 붙�
     public string ex;
     [SerializeField] int up;
     public Sprite spr;
-    public GameObject upgrade;
 
     public void ClickPurchase()  //새우 구매(ShopManager에서 사용될 함수)
     {
