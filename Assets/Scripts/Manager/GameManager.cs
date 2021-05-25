@@ -89,6 +89,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private Sprite backgroundSprite;
     [Tooltip("피버 타임 배경 이미지")]
     [SerializeField] private Sprite fvTimeSprite;
+    [Tooltip("피버 타임중 지워질 오브젝트")]
+    [SerializeField] private GameObject removeObject;
 
     private float feverTime = 0f; //피버 타임
     private bool isFeverTime = false; //현재 피버타임인지 확인
@@ -104,6 +106,18 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private AudioClip shopBGM;
     [Tooltip("BGM을 재생하는곳")]
     [SerializeField] private AudioSource bgm;
+
+    #endregion
+
+    #region 이펙트 관련 변수
+
+    [Header("이펙트 관련 변수")]
+    [Tooltip("이펙트 1")]
+    [SerializeField] private Animator effect1;
+    [Tooltip("이펙트 2")]
+    [SerializeField] private Animator effect2;
+
+    private int touch = 0;
 
     #endregion
 
@@ -277,6 +291,18 @@ public class GameManager : MonoSingleton<GameManager>
         }
 
         prawnAnimator.Play("PrawnAnimation");
+        effect1.Play("Effect");
+
+        touch++;
+        
+        if (touch % 10 == 0)
+        {
+            effect2.Play("Effect2");
+        }
+        else
+        {
+            effect1.Play("Effect");
+        }
     }
 
     public IEnumerator AutoTouch()  //자동 터치 코루틴
@@ -497,6 +523,7 @@ public class GameManager : MonoSingleton<GameManager>
         isFeverTime = false;
         feverTimeText.SetActive(false);
         background.sprite = backgroundSprite;
+        removeObject.SetActive(true);
     }
 
     private void FeverTimeCheck()
@@ -523,6 +550,7 @@ public class GameManager : MonoSingleton<GameManager>
             feverTime = Time.time;
             fishTransform.GetComponent<Fish>().FishDestroy();
             background.sprite = fvTimeSprite;
+            removeObject.SetActive(false);
         } 
     }
 }
