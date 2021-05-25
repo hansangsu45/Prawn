@@ -56,6 +56,9 @@ public class GameManager : MonoSingleton<GameManager>
     public GameObject[] menus;
     public int[] menusNum;
 
+    public AudioSource _audio;
+    public AudioClip[] _clips;
+
     #region 물고기 움직임 관련 변수
     //랜덤 위치 (maxPosition minPosition) 제한
     //랜덤 초 기다림 (max time min time) 제한
@@ -209,6 +212,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (isFeverTime)
         {
+            _audio.clip = _clips[0];
+            _audio.Play();
             saveData.coin += saveData.currentPrawn.power * 2;
             coinTxt.text = saveData.coin.ToString();
             saveData.currentPrawn.touchCount++;
@@ -233,6 +238,8 @@ public class GameManager : MonoSingleton<GameManager>
                 return;
             }
 
+            _audio.clip = _clips[0];
+            _audio.Play();
             saveData.coin += saveData.currentPrawn.power;
             coinTxt.text = saveData.coin.ToString();
             saveData.currentPrawn.touchCount++;
@@ -285,6 +292,8 @@ public class GameManager : MonoSingleton<GameManager>
                 bQuitPanel = true;
                 ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
             }
+            _audio.clip = _clips[1];
+            _audio.Play();
         }
         
         if (Input.GetMouseButtonDown(0)) ClickFish();
@@ -343,6 +352,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         mainObjs[n].SetActive(!mainObjs[n].activeSelf);
         shopManager.UpgradeRenewal();
+        _audio.clip = _clips[1];
+        _audio.Play();
     }
 
     public void ThreeMenu(int num)
@@ -462,7 +473,7 @@ public class GameManager : MonoSingleton<GameManager>
         bool isFishActive = fishTransform.gameObject.activeSelf;
         float distance = Vector3.Distance(fishTransform.position, mousePosition);
 
-        if (distance < 10.1f && isFishActive)
+        if (distance < 10.01f && isFishActive)
         {
             isFeverTime = true;
             feverTimeText.SetActive(true);
