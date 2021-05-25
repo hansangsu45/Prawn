@@ -308,6 +308,12 @@ public class GameManager : MonoSingleton<GameManager>
                         menus[i].transform.parent = mainObjs[0].transform;
                     }
                 }
+
+                if(uiObjs.Count==0&& bgm.clip != backgroundBGM)
+                {
+                    bgm.clip = backgroundBGM;
+                    bgm.Play();
+                }
             }
             else
             {
@@ -376,6 +382,16 @@ public class GameManager : MonoSingleton<GameManager>
         shopManager.UpgradeRenewal();
         _audio.clip = _clips[1];
         _audio.Play();
+        if (n == 0 && mainObjs[n].activeSelf)
+        {
+            bgm.clip = shopBGM;
+            bgm.Play();
+        }
+        else if (uiObjs.Count == 0 && bgm.clip != backgroundBGM)
+        {
+            bgm.clip = backgroundBGM;
+            bgm.Play();
+        }
     }
 
     public void ThreeMenu(int num)
@@ -399,7 +415,11 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 if (menusNum[i] != num)
                 {
-                    mainObjs[menusNum[i]].SetActive(false);
+                    if (mainObjs[menusNum[i]].activeSelf)
+                    {
+                        uiObjs.Remove(mainObjs[menusNum[i]]);
+                        mainObjs[menusNum[i]].SetActive(false);
+                    }
                 }
             }
             shopManager.MenuAni(false);
