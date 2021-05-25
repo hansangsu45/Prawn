@@ -78,13 +78,10 @@ public class GameManager : MonoSingleton<GameManager>
     [Header("피버 타임 관련 변수")]
     [Tooltip("피버 타임 텍스트")]
     [SerializeField] private GameObject feverTimeText;
-    [Tooltip("피버 타임 시작까지 최소 시간")]
-    [SerializeField] private float feverStartMinTime;
-    [Tooltip("피버 타임 시작까지 최대 시간")]
-    [SerializeField] private float feverStartMaxTime;
+    [Tooltip("물고기 위치")]
+    public Transform fishTransform;
 
-    private float lastFeverTime = 0f; //마지막 피버 타임
-    private float feverStartTime = 0f; //피버 스타트 타임
+    private float feverTime = 0f; //피버 타임
     private bool isFeverTime = false; //현재 피버타임인지 확인
 
     #endregion
@@ -289,6 +286,8 @@ public class GameManager : MonoSingleton<GameManager>
                 ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
             }
         }
+        
+        if (Input.GetMouseButtonDown(0)) ClickFish();
 
         FeverTimeCheck();
     }
@@ -412,7 +411,16 @@ public class GameManager : MonoSingleton<GameManager>
 
             fishGO.SetActive(true);
             randomPosition.x = fishMinPosition.x;
-            randomPosition.y = UnityEngine.Random.Range(fishMinPosition.y, fishMaxPosition.y);
+
+            if (fishTransform == this.fishTransform)
+            {
+                randomPosition.y = 2.75f;
+            }
+            else
+            {
+                randomPosition.y = UnityEngine.Random.Range(fishMinPosition.y, fishMaxPosition.y);
+            }
+            
             fishTransform.position = randomPosition;
             fishTransform.SetParent(null, true);
             randomWaitSecond = UnityEngine.Random.Range(fishMinTime, fishMaxTime);
@@ -432,29 +440,34 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void FeverTimeReset()
     {
-        feverStartTime = UnityEngine.Random.Range(feverStartMinTime, feverStartMaxTime);
-        lastFeverTime = Time.time;
+        feverTime = Time.time;
         isFeverTime = false;
         feverTimeText.SetActive(false);
     }
 
     private void FeverTimeCheck()
     {
-        if(!isFeverTime)
+        if (isFeverTime)
         {
-            if (Time.time >= lastFeverTime + feverStartTime)
-            {
-                isFeverTime = true;
-                feverTimeText.SetActive(true);
-                lastFeverTime = Time.time;
-            }
-        }
-        else
-        {
-            if (Time.time >= lastFeverTime + 30f)
+            if (Time.time >= feverTime + 10f)
             {
                 FeverTimeReset();
             }
         }
+    }
+
+    public void ClickFish()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        bool isFishActive = fishTransform.gameObject.activeSelf;
+        float distance = Vector3.Distance(fishTransform.position, mousePosition);
+
+        if (distance < 10.1f && isFishActive)
+        {
+            isFeverTime = true;
+            feverTimeText.SetActive(true);
+            feverTime = Time.time;
+            fishTransform.GetComponent<Fish>().FishDestroy();
+        } 
     }
 }

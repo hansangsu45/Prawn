@@ -13,23 +13,33 @@ public class Fish : MonoBehaviour
     [SerializeField] private float minSpeed;
     [SerializeField] private float maxSpeed;
 
+    private GameManager gameManager;
+    
     private void Awake()
     {
         fishPooling = GameObject.Find("FishPooling");
+        gameManager = GameManager.Instance;
     }
 
     private void Update()
     {
-        if (transform.localPosition.x <= GameManager.Instance.fishMinPosition.x)
+        if (transform.localPosition.x <= gameManager.fishMinPosition.x)
         {
-            speed = Random.Range(minSpeed, maxSpeed);
+            if(transform == gameManager.fishTransform)
+            {
+                speed = 1f;
+            }
+            else
+            {
+                speed = Random.Range(minSpeed, maxSpeed);
+            }
         }
 
         targetPosition = transform.localPosition;
         targetPosition.x += speed * Time.deltaTime;
         transform.localPosition = targetPosition;
 
-        if (transform.localPosition.x >= GameManager.Instance.fishMaxPosition.x)
+        if (transform.localPosition.x >= gameManager.fishMaxPosition.x)
         {
             FishDestroy();
         }
