@@ -83,9 +83,27 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private GameObject feverTimeText;
     [Tooltip("물고기 위치")]
     public Transform fishTransform;
+    [Tooltip("배경 이미지 넣는곳")]
+    [SerializeField] private SpriteRenderer background;
+    [Tooltip("배경 이미지")]
+    [SerializeField] private Sprite backgroundSprite;
+    [Tooltip("피버 타임 배경 이미지")]
+    [SerializeField] private Sprite fvTimeSprite;
 
     private float feverTime = 0f; //피버 타임
     private bool isFeverTime = false; //현재 피버타임인지 확인
+
+    #endregion
+
+    #region BGM 관련 변수
+
+    [Header("BGM 관련 변수")]
+    [Tooltip("배경 음악")]
+    [SerializeField] private AudioClip backgroundBGM;
+    [Tooltip("상점 배경 음악")]
+    [SerializeField] private AudioClip shopBGM;
+    [Tooltip("BGM을 재생하는곳")]
+    [SerializeField] private AudioSource bgm;
 
     #endregion
 
@@ -130,6 +148,9 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(SpawnFish());
 
         FeverTimeReset();
+
+        bgm.clip = backgroundBGM;
+        bgm.Play();
     }
 
     #region 저장/로드
@@ -276,6 +297,7 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 uiObjs[uiObjs.Count - 1].SetActive(false);
                 uiObjs.RemoveAt(uiObjs.Count - 1);
+
                 if (bQuitPanel) bQuitPanel = false;
 
                 if (!mainObjs[0].activeSelf && !mainObjs[3].activeSelf&& !mainObjs[4].activeSelf)
@@ -454,6 +476,7 @@ public class GameManager : MonoSingleton<GameManager>
         feverTime = Time.time;
         isFeverTime = false;
         feverTimeText.SetActive(false);
+        background.sprite = backgroundSprite;
     }
 
     private void FeverTimeCheck()
@@ -479,6 +502,7 @@ public class GameManager : MonoSingleton<GameManager>
             feverTimeText.SetActive(true);
             feverTime = Time.time;
             fishTransform.GetComponent<Fish>().FishDestroy();
+            background.sprite = fvTimeSprite;
         } 
     }
 }
