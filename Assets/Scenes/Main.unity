@@ -10020,6 +10020,7 @@ MonoBehaviour:
   removeObject: {fileID: 1627961182}
   backgroundBGM: {fileID: 8300000, guid: 451782de686d7f04fbf522f2c10e21bf, type: 3}
   shopBGM: {fileID: 8300000, guid: 0a55d077a2a58544b828bc540ba991a7, type: 3}
+  feverBGM: {fileID: 8300000, guid: cafe804bbad61064fa8c80f954bff242, type: 3}
   bgm: {fileID: 2070027243}
   effect1: {fileID: 1718857691}
   effect2: {fileID: 179209073}

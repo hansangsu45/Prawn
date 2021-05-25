@@ -104,6 +104,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private AudioClip backgroundBGM;
     [Tooltip("상점 배경 음악")]
     [SerializeField] private AudioClip shopBGM;
+    [SerializeField] AudioClip feverBGM;
     [Tooltip("BGM을 재생하는곳")]
     [SerializeField] private AudioSource bgm;
 
@@ -337,7 +338,8 @@ public class GameManager : MonoSingleton<GameManager>
 
                 if(uiObjs.Count==0&& bgm.clip != backgroundBGM)
                 {
-                    bgm.clip = backgroundBGM;
+                    if (isFeverTime) bgm.clip = feverBGM;
+                    else bgm.clip = backgroundBGM;
                     bgm.Play();
                 }
             }
@@ -415,7 +417,8 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else if (uiObjs.Count == 0 && bgm.clip != backgroundBGM)
         {
-            bgm.clip = backgroundBGM;
+            if (isFeverTime) bgm.clip = feverBGM;
+            else bgm.clip = backgroundBGM;
             bgm.Play();
         }
     }
@@ -524,6 +527,15 @@ public class GameManager : MonoSingleton<GameManager>
         feverTimeText.SetActive(false);
         background.sprite = backgroundSprite;
         removeObject.SetActive(true);
+        if(uiObjs.Count==0||(uiObjs.Count==1&&mainObjs[1].activeSelf))
+        {
+            bgm.clip = backgroundBGM;
+        }
+        else
+        {
+            bgm.clip = shopBGM;
+        }
+        bgm.Play();
     }
 
     private void FeverTimeCheck()
@@ -551,6 +563,8 @@ public class GameManager : MonoSingleton<GameManager>
             fishTransform.GetComponent<Fish>().FishDestroy();
             background.sprite = fvTimeSprite;
             removeObject.SetActive(false);
+            bgm.clip = feverBGM;
+            bgm.Play();
         } 
     }
 }
