@@ -124,9 +124,12 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Awake()
     {
+
+#if UNITY_ANDROID
         Application.runInBackground = true;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution(1440, 2960, true);
+#endif
 
         saveData = new SaveData();
         filePath = string.Concat(Application.persistentDataPath, "/", SaveFileName);
@@ -144,7 +147,7 @@ public class GameManager : MonoSingleton<GameManager>
         prawnAnimator = myPrawn.GetComponent<Animator>();
         fishPooling = GameObject.Find("FishPooling");
 
-        #region (혹시 잘못되면 바로 알아볼 수 있도록 코드 추가함) fishPooling 관련 예외 처리 (유니티 안에서만 실행됨)
+#region (혹시 잘못되면 바로 알아볼 수 있도록 코드 추가함) fishPooling 관련 예외 처리 (유니티 안에서만 실행됨)
 #if UNITY_EDITOR
         if (fishPooling == null) //fishPooling이 없다면 실행
         {
@@ -157,7 +160,7 @@ public class GameManager : MonoSingleton<GameManager>
             UnityEditor.EditorApplication.isPlaying = false;
         }
 #endif
-        #endregion
+#endregion
 
         StartCoroutine(FadeEffect(BlackPanel.GetComponent<Image>()));
         StartCoroutine(SpawnFish());
@@ -168,7 +171,7 @@ public class GameManager : MonoSingleton<GameManager>
         bgm.Play();
     }
 
-    #region 저장/로드
+#region 저장/로드
     public void Save()  //저장
     {
         SaveData();
@@ -242,7 +245,7 @@ public class GameManager : MonoSingleton<GameManager>
         eColor.Add(Color_State.ORANGE, new Color(255, 99, 0, 255));
     }
 
-    #endregion
+#endregion
 
     public void Touch()  //화면 터치
     {
