@@ -53,13 +53,15 @@ public class ShopManager : MonoBehaviour
         if (isPoss)
         {
             up.SetActive(true);
-            string str=$"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
-            if(GameManager.Instance.savedData.coin>=GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice && GameManager.Instance.idToPrawn[SelectedPrawn.id].level < 5)
+            Prawn _p = GameManager.Instance.idToPrawn[SelectedPrawn.id];
+            string str=$"{_p.level}레벨";
+            if(GameManager.Instance.savedData.coin>=_p.upgradePrice && _p.level < 5)
             {
                 up2.SetActive(true);
                 str += "\n업그레이드 가능!";
             }
             reinforceTxt.text = str;
+            prawnAbilTxt.text = $"판매 가격:{_p.price}\n체력:{_p.maxHp}\n공격력:{_p.str}\n방어력:{_p.def}\n필요 휴식시간:{_p.restTime}초\n필요 먹이량:{_p.foodAmount}";
         }
         else
         {
@@ -81,12 +83,14 @@ public class ShopManager : MonoBehaviour
 
         //prawnAbilTxt.text= 나중에
         up.SetActive(true);
-        string str = $"{GameManager.Instance.idToPrawn[SelectedPrawn.id].level}레벨";
-        if (GameManager.Instance.savedData.coin >= GameManager.Instance.idToPrawn[SelectedPrawn.id].upgradePrice)
+        Prawn _p = GameManager.Instance.idToPrawn[SelectedPrawn.id];
+        string str = $"{_p.level}레벨";
+        if (GameManager.Instance.savedData.coin >= _p.upgradePrice)
         {
             up2.SetActive(true);
             str += "\n업그레이드 가능!";
         }
+        prawnAbilTxt.text = $"판매 가격:{_p.price}\n체력:{_p.maxHp}\n공격력:{_p.str}\n방어력:{_p.def}\n필요 휴식시간:{_p.restTime}초\n필요 먹이량:{_p.foodAmount}";
         reinforceTxt.text = str;
     }
 
