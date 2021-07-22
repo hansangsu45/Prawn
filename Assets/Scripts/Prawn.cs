@@ -19,6 +19,8 @@ public class SaveData
     public int autocoinLv = 0;
 
     public Prawn currentPrawn;  //현재 착용중인 새우
+
+    public int trainingBestScore;
 }
 
 [Serializable]

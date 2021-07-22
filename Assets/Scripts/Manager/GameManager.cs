@@ -28,6 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
     public SaveData savedData { get { return saveData; } }
     public ShopManager shopManager;
     public Food food;
+    public Training training;
     public Dictionary<int, Prawn> idToPrawn;
     public Dictionary<Color_State, Color> eColor;
     private bool bQuitPanel = false;
