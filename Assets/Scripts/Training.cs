@@ -32,6 +32,16 @@ public class Training : MonoBehaviour
     private int score;
     private bool isGameEnd;  //죽었는가? (훈련 게임에는 참가된 상태)
 
+    public GameOverPanel gameOverPanel;
+    [HideInInspector] public bool isGameOverPanelActive = false;
+
+    private IEnumerator enemyCoroutine = null;
+    private IEnumerator foodCoroutine = null;
+
+    [Header("체력 표시")]
+    [SerializeField] private Image[] lifeImages;
+    [SerializeField] private Color damageDisplayColor;
+
     private void Start() //제네릭 오브젝트 풀링 쓰는게 좋은데 일단 급하니 이렇게 함
     {
         bestScoreTxt.text = string.Format("최고점수: {0}점", GameManager.Instance.savedData.trainingBestScore);
@@ -68,8 +78,15 @@ public class Training : MonoBehaviour
         isTraining = isStart;
         TrainingGamePanel.SetActive(isStart);
 
+        GameManager.Instance.isTraining = isStart;
+
         if(isStart)
         {
+            foreach (Image lifeImage in lifeImages)
+            {
+                lifeImage.sprite = GameManager.Instance.savedData.currentPrawn.spr;
+            }
+
             prawn.spr.sprite = GameManager.Instance.savedData.currentPrawn.spr;
             GameReset();
         }
@@ -77,6 +94,17 @@ public class Training : MonoBehaviour
 
     public void GameReset() //게임 다시시작
     {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (enemy.gameObject.activeSelf)
+            {
+                InsertQueue(enemy.gameObject, enemy.isEnemy);
+            }
+        }
+
+        if (enemyCoroutine != null) StopCoroutine(enemyCoroutine);
+        if (foodCoroutine != null) StopCoroutine(foodCoroutine);
+
         score = 0;
         curScoreTxt.text = string.Format("Score: {0}", score);
         isGameEnd = false;
@@ -84,8 +112,16 @@ public class Training : MonoBehaviour
         delayMax = maxRange;
         time = 0;
 
-        StartCoroutine(SpawnEnemy());
-        StartCoroutine(SpawnFood());
+        foreach (Image lifeImage in lifeImages)
+        {
+            lifeImage.color = Color.white;
+        }
+
+        enemyCoroutine = SpawnEnemy();
+        foodCoroutine = SpawnFood();
+
+        StartCoroutine(enemyCoroutine);
+        StartCoroutine(foodCoroutine);
     }
 
     public void HitPlayer()  //쳐맞음
@@ -93,6 +129,9 @@ public class Training : MonoBehaviour
         if (life <= 0) return;
 
         life--;
+
+        lifeImages[life].color = damageDisplayColor;
+
         if (life == 0) GameOver();
     }
 
@@ -113,6 +152,9 @@ public class Training : MonoBehaviour
         }
 
         isGameEnd = true;
+
+        GameManager.Instance.ButtonUIClick(9);
+        gameOverPanel.ShowScore(score, GameManager.Instance.savedData.trainingBestScore);
     }
 
 
@@ -170,17 +212,53 @@ public class Training : MonoBehaviour
             GameObject e = GetQueue(true);
             e.transform.position = new Vector2(Random.Range(xMin, xMax), enemyY);
         }
+
+        enemyCoroutine = null;
     }
 
     IEnumerator SpawnFood()
     {
         while (isTraining && !isGameEnd)
         {
-            
             yield return new WaitForSeconds(Random.Range(0.6f,3.5f));
 
             GameObject f = GetQueue(false);
             f.transform.position = new Vector2(Random.Range(xMin, xMax), enemyY);
+        }
+
+        foodCoroutine = null;
+    }
+
+    public void ReStart(bool gameOver)
+    {
+        if (gameOver)
+        {
+            GameManager.Instance.ButtonUIClick(9);
+            GameReset();
+        }
+        else
+        {
+            GameManager.Instance.ButtonUIClick(8);
+            GameReset();
+        }
+    }
+
+    public void Continue()
+    {
+        GameManager.Instance.ButtonUIClick(8);
+    }
+
+    public void Exit(bool gameOver)
+    {
+        if (gameOver)
+        {
+            GameManager.Instance.ButtonUIClick(9);
+            StartOrQuit(false);
+        }
+        else
+        {
+            GameManager.Instance.ButtonUIClick(8);
+            StartOrQuit(false);
         }
     }
 }

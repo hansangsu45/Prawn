@@ -30,7 +30,8 @@ public class TrainingPrawn : MonoBehaviour
     private void HitEffect() //맞았을 때의 이벤트와 이펙트
     {
         training.HitPlayer();
-        StartCoroutine(Hit());
+
+        if (!training.isGameOverPanelActive) StartCoroutine(Hit());
     }
 
     IEnumerator Hit()

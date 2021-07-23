@@ -123,6 +123,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     #endregion
 
+    [HideInInspector] public bool isTraining = false;
+
     private void Awake()
     {
 
@@ -324,36 +326,43 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(uiObjs.Count>0)
+            if (isTraining)
             {
-                uiObjs[uiObjs.Count - 1].SetActive(false);
-                uiObjs.RemoveAt(uiObjs.Count - 1);
-
-                if (bQuitPanel) bQuitPanel = false;
-
-                if (!mainObjs[0].activeSelf && !mainObjs[3].activeSelf&& !mainObjs[4].activeSelf)
-                {
-                    shopManager.MenuAni(false);
-                    for (int i = 0; i < menus.Length; i++)
-                    {
-                        menus[i].transform.parent = mainObjs[0].transform;
-                    }
-                }
-
-                if(uiObjs.Count==0&& bgm.clip != backgroundBGM)
-                {
-                    if (isFeverTime) bgm.clip = feverBGM;
-                    else bgm.clip = backgroundBGM;
-                    bgm.Play();
-                }
+                ButtonUIClick(8);
             }
             else
             {
-                bQuitPanel = true;
-                ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
+                if (uiObjs.Count > 0)
+                {
+                    uiObjs[uiObjs.Count - 1].SetActive(false);
+                    uiObjs.RemoveAt(uiObjs.Count - 1);
+
+                    if (bQuitPanel) bQuitPanel = false;
+
+                    if (!mainObjs[0].activeSelf && !mainObjs[3].activeSelf && !mainObjs[4].activeSelf)
+                    {
+                        shopManager.MenuAni(false);
+                        for (int i = 0; i < menus.Length; i++)
+                        {
+                            menus[i].transform.parent = mainObjs[0].transform;
+                        }
+                    }
+
+                    if (uiObjs.Count == 0 && bgm.clip != backgroundBGM)
+                    {
+                        if (isFeverTime) bgm.clip = feverBGM;
+                        else bgm.clip = backgroundBGM;
+                        bgm.Play();
+                    }
+                }
+                else
+                {
+                    bQuitPanel = true;
+                    ActiveSystemPanel("<b>게임을 종료하시겠습니까?</b>", Color_State.BLACK, 110);
+                }
+                _audio.clip = _clips[1];
+                _audio.Play();
             }
-            _audio.clip = _clips[1];
-            _audio.Play();
         }
         
         if (Input.GetMouseButtonDown(0)) ClickFish();
